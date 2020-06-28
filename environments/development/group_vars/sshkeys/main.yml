@@ -1,0 +1,3 @@
+---
+# vars file for roles/sshkeys
+user: "{{ lookup('env', 'USER') }}"

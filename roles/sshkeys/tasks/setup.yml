@@ -1,0 +1,21 @@
+    - name: Check does file authorized_keys exists
+      stat:
+        path: ~/.ssh/authorized_keys
+      register: file_status
+
+    - debug:
+        msg: "File already exists!"
+      when: file_status.stat.exists
+
+    - name: Create authorized_keys if it not exists
+      file:
+        path: ~/.ssh/authorized_keys
+        state: touch
+        mode: 0600
+      when: file_status.stat.exists == false
+      
+    - name: Set personal authorized key
+      authorized_key:
+        user: "{{ user }}"
+        state: present
+        key: "{{ lookup('file', '/home/{{ user }}/.ssh/private.pub') }}" 

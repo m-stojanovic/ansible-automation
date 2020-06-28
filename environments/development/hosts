@@ -1,0 +1,7 @@
+[development:children]
+sshkeys
+
+[sshkeys]
+ansible-target-1 ansible_host=192.168.0.34 ansible_user=root ansible_ssh_pass="osboxesorg"
+ansible-target-2 ansible_host=192.168.0.35 ansible_user=root ansible_ssh_pass="osboxesorg"
+

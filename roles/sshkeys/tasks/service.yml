@@ -1,0 +1,6 @@
+- name: Check is ssh installed
+  service:
+    name: ssh
+    state: started
+    enabled: yes
+

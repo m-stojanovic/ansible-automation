@@ -1,0 +1,4 @@
+---
+- hosts: sshkeys
+  roles:
+    - sshkeys
