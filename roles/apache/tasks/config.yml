@@ -1,0 +1,7 @@
+---
+- name: copy index.html file
+  copy:
+    src: files/index.html
+    dest: /var/www/html/
+  notify:
+      - restart_apache

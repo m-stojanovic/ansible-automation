@@ -1,0 +1,7 @@
+---
+- hosts: sshkeys
+  #become: true
+  #become_user: root
+  roles:
+    - apache
+
