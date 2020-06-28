@@ -1,0 +1,31 @@
+- hosts: local
+  become: true
+  become_user: root
+  tasks:
+    - name: verify is the app&db running
+      shell: if ps -aux | grep 'httpd' > /dev/null; then echo 'processes_running'; else echo 'processes_not_running'; fi
+      ignore_errors: true
+      register: app_process_check 
+    - debug:
+        msg: "{{ app_process_check.stdout }}"
+    
+    - name: decision to start patching
+      fail: msg="{{ inventory_hostname }} have running application. Please stop the app first, then attempt patching." # if the condition of 'fail:' is true it will stop and not go further with playbook.
+      when: appr_process_check.stdout == "processes_running" # this is condition which 'fail:' will refer or check
+
+    - name: upgrade all packages on the server
+      apt:
+        name: Kernel
+        state: latest
+      when: appr_process_check.stdout == "processes_not_running"
+      register: yum_update
+    - debug:
+        msg: "Kernel patch {{ ansible_kernel }} has been updated on the server {{ ansible_fqdn }}"
+        when: yum_update.rc == 0 # if it updated successfully , its exit code will be 0.
+    
+    - name: check if reboot is required after kernel update
+      shell: kernel_new=$(rpm -qa --last kernel | head -1 | awk '{print $1}' | sed 's/kernel-//g'); kernel_now=$(uname -r); if [[ $kernel_new != $kernel_now ]]; then echo "reboot is required"; else echo "reboot not required"; fi # checking new and current kernel version
+      ignore_errors: true
+      register: reboot_check
+    - debug:
+       msg: "{{ reboot_check.stdout }}"

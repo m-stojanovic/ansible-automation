@@ -1,0 +1,40 @@
+---
+- hosts: local
+  become: true
+  become_user: root
+  tasks:
+    - name: install latest versions of apache and firewalld
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - apache2
+        - firewalld
+    - name: start & enable apache2 & firewalld service
+      service:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      with_items:
+        - apache2
+        - firewalld
+
+    - name: permit apache2 service in firewalld
+      firewalld: 
+        service: http
+        permanent: true
+        state: enabled
+        immediate: yes
+    - name: create html web page
+      copy:
+        content: "Welcome to new html page!\n"
+        dest: /var/www/html/index.html
+    - name: define a webserver name
+      lineinfile: 
+        path: /etc/apache2/apache2.conf
+        line: ServerName www.client1.example.com:80
+        insertafter: "# Use mod_remoteip"
+    - name: Update entry in /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 192.168.0.34 www.client.example.com
