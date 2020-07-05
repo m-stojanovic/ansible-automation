@@ -1,0 +1,4 @@
+---
+- hosts: basics_debian
+  roles:
+  - basics_debian
