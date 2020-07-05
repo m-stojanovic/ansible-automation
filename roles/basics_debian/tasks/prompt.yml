@@ -1,0 +1,8 @@
+- name: update color prompt
+  lineinfile:
+    path: ~/.bashrc
+    line: "force_color_prompt=yes"
+    insertafter: EOF
+  become_user: osboxes
+  become: true
+

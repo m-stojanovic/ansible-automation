@@ -1,0 +1,15 @@
+- name: remove cloud-init
+  apt:
+    name: cloud-init
+    state: absent
+    force_apt_get: yes
+
+- name: remove cloud-init local data
+  file:
+    path: /etc/cloud
+    state: absent
+
+- name: remove cloud-init system data
+  file:
+    path: /var/lib/cloud
+    state: absent

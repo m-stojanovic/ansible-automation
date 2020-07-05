@@ -1,0 +1,12 @@
+- name: set a hostname
+  hostname:
+    name: "{{ item.name }}"
+  when: "{{ ansible_hostname == item.host }}"
+  with_items:
+    - { name: ansible-slave-1, host: ansible-slave-A }
+    - { name: ansible-slave-2, host: ansible-slave-B }
+
+- name: setup the hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts

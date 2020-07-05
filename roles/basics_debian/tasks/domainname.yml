@@ -1,0 +1,3 @@
+- name: setup the domain name
+  command: "domainname {{ domain_name }}" 
+  when: ansible_facts.domain != domain_name

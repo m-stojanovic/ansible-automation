@@ -1,0 +1,14 @@
+{{ ansible_managed | comment }}
+127.0.0.1 localhost
+{{ ansible_facts.default_ipv4.address }} {{ ansible_facts.hostname }}.{{ domain_name if domain_name is defined else ansible_facts.domain }} {{ ansible_facts.hostname }}
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+{% if hosts_add is defined and hosts_add %}
+{% for entry in hosts_add %}
+{{ entry }}
+{% endfor %}
+{% endif %}
