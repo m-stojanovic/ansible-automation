@@ -21,7 +21,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - basic_setup
+         - basics_debian
 
 Author Information
 ------------------
