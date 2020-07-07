@@ -1,0 +1,37 @@
+---
+- name: Install common packages
+  apt:
+    name: "{{ common_packages }}"
+    state: present
+    force_apt_get: true
+  become: true
+
+- name: Use the configured network configuration method
+  include_tasks: "{{ network_configuration_mode }}.yml"
+
+- name: Make sure systemd-resolved is started
+  systemd:
+    state: started
+    name: "systemd-resolved"
+  become: true
+
+- name: Update systemd-resolved config
+  template:
+    src: resolved.conf.j2
+    dest: /etc/systemd/resolved.conf
+  when: resolved_config != []
+  notify: Restart systemd-resolved
+  become: true
+
+- name: Update resolv.conf to use systemd-resolved
+  file:
+    path: /etc/resolv.conf
+    src: ../run/systemd/resolve/{% if resolved_config.dnsstublistener is defined and resolved_config.dnsstublistener == 'no' %}resolv.conf{% else %}stub-resolv.conf{% endif %}
+    state: link
+    force: yes
+    follow: false
+  become: true
+
+- name: Apply the new config immediately
+  meta: flush_handlers
+

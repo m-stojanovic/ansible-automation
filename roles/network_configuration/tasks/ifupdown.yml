@@ -1,0 +1,42 @@
+---
+- name: Install ifupdown
+  apt:
+    name: "{{ ifupdown_packages }}"
+    state: present
+    install_recommends: no
+    force_apt_get: true  
+
+- name: Get existing interfaces.d files
+  find:
+    paths: /etc/network/interfaces.d
+    patterns: "*"
+  register: interfaces_configs
+  when: ifupdown_remove_existing | bool
+
+- name: Removing existing interfaces.d files
+  file:
+    path: "{{ item['path'] }}"
+    state: absent
+  loop: "{{ interfaces_configs['files']|flatten(1) }}"
+  when:
+    - ifupdown_remove_existing | bool
+    - item['path'] != ifupdown_config
+    - ifupdown_interfaces != []
+  become: true
+
+- name: Create ifupdown config in interfaces.d
+  template:
+    src: ifupdown.j2
+    dest: "{{ ifupdown_config }}"
+  when: ifupdown_interfaces != []
+  notify: Apply ifupdown configuration
+  become: true
+
+- name: Replace main interfaces file
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+  when: ifupdown_interfaces != []
+  notify: Apply ifupdown configuration
+  become: true
+

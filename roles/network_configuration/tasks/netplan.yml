@@ -1,0 +1,35 @@
+---
+- name: Install netplan
+  apt:
+    name: "{{ netplan_packages }}"
+    state: present
+    force_apt_get: true
+  become: true
+
+- name: Get existing netplan YAMLs
+  find:
+    paths: /etc/netplan
+    patterns: "*.yml,*.yaml"
+  register: netplan_yamls
+  when: netplan_remove_existing | bool
+
+- name: Removing existing netplan YAMLs
+  file:
+    path: "{{ item['path'] }}"
+    state: absent
+  loop: "{{ netplan_yamls['files']|flatten(1) }}"
+  when:
+    - netplan_remove_existing | bool
+    - item['path'] != netplan_config
+    - netplan_configuration != []
+  notify: Apply netplan configuration
+  become: true
+
+- name: Create netplan config
+  template:
+    src: netplan.yaml.j2
+    dest: "{{ netplan_config }}"
+  when: netplan_configuration != []
+  notify: Apply netplan configuration
+  become: true
+

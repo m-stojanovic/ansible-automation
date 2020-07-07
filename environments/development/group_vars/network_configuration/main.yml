@@ -1,0 +1,23 @@
+---
+netplan_supported: ["Ubuntu"]
+network_configuration_mode: "{{ 'netplan' if ansible_facts.distribution is in netplan_supported else 'ifupdown' }}"
+
+common_packages:
+  - bridge-utils
+
+netplan_packages:
+  - netplan.io
+
+netplan_remove_existing: true
+netplan_config: /etc/netplan/ansible.yaml
+netplan_renderer: networkd
+netplan_configuration: []
+
+ifupdown_packages:
+  - ifupdown
+
+ifupdown_remove_existing: true
+ifupdown_config: /etc/network/interfaces.d/ansible
+ifupdown_interfaces: []
+resolved_config: []
+

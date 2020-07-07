@@ -1,0 +1,13 @@
+{{ ansible_managed | comment }}
+
+{% for interface, options in ifupdown_interfaces.items() %}
+{% if options.auto is defined and options.auto|bool %}
+auto {{ options.device }}
+{% endif %}
+iface {{ options.device }} inet {{ options.mode | default('dhcp') }}
+{% if options.config is defined and options.config|length %}
+{% for key, value in options.config.items() %}
+{{ key }} {{ value }}
+{% endfor %}
+{% endif %}
+{% endfor %}

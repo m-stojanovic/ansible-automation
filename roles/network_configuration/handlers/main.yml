@@ -1,0 +1,17 @@
+---
+- name: Apply netplan configuration
+  command: "netplan apply"
+  become: true
+
+- name: Apply ifupdown configuration
+  systemd:
+    state: restarted
+    name: "networking"
+  become: true
+
+- name: Restart systemd-resolved
+  systemd:
+    state: restarted
+    name: "systemd-resolved"
+  become: true
+

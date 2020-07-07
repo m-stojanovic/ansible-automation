@@ -1,0 +1,27 @@
+{{ ansible_managed | comment }}
+
+[Resolve]
+{% if resolved_config is defined %}
+{% if resolved_config.dns is defined and resolved_config.dns|length %}
+DNS={{ resolved_config.dns|join(' ') }}
+{% endif %}
+{% if resolved_config.fallback is defined and resolved_config.fallback|length %}
+FallbackDNS={{ resolved_config.fallback|join(' ') }}
+{% endif %}
+{% if resolved_config.domains is defined and resolved_config.domains|length %}
+Domains={{ resolved_config.domains|join(' ') }}
+{% endif %}
+{% if resolved_config.llmnr is defined and resolved_config.llmnr|length %}
+LLMNR={{ resolved_config.llmnr }}
+{% endif %}
+{% if resolved_config.dnssec is defined and resolved_config.dnssec|length %}
+DNSSEC={{ resolved_config.dnssec }}
+{% endif %}
+{% if resolved_config.cache is defined and resolved_config.cache|length %}
+Cache={{ resolved_config.cache }}
+{% endif %}
+{% if resolved_config.dnsstublistener is defined and resolved_config.dnsstublistener|length %}
+DNSStubListener={{ resolved_config.dnsstublistener }}
+{% endif %}
+{% endif %}
+
