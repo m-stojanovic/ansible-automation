@@ -1,0 +1,3 @@
+---
+- name: 'Rebuild ssmtp'
+  command: dpkg-reconfigure ssmtp -f noninteractive -p high

@@ -1,0 +1,5 @@
+---
+- hosts: basics_debian
+  roles:
+    - ssmtp
+
