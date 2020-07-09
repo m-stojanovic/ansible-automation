@@ -1,0 +1,10 @@
+---
+- name: make sure that these packages are not installed
+  apt:
+    name: "{{ remove_packages }}"
+    state: absent
+    autoclean: true
+    force_apt_get: true
+
+- name: load nullmailer tasks
+  include_tasks: "{{ nullmailer }}.yml"

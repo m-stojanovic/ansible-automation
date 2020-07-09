@@ -1,0 +1,30 @@
+{{ ansible_managed | comment }}
+
+{% if nullmailer_to is defined and nullmailer_to|length %}
+Root={{ nullmailer_to }}
+{% endif %}
+
+{% if nullmailer_host is defined and nullmailer_host|length %}
+MailHub={{ nullmailer_host }}:{{ nullmailer_port }}
+{% endif %}
+
+{% if nullmailer_mailname is defined and nullmailer_mailname|length %}
+RewriteDomain={{ nullmailer_mailname }}
+{% endif %}
+
+{% if nullmailer_fqdn is defined and nullmailer_fqdn|length %}
+Hostname={{ nullmailer_fqdn }}
+{% endif %}
+
+FromLineOverride={{ 'YES' if nullmailer_fromoverride|bool else 'NO' }}
+UseTLS={{ 'YES' if nullmailer_tls|bool else 'NO' }}
+UseSTARTTLS={{ 'YES' if nullmailer_starttls|bool else 'NO' }}
+
+{% if nullmailer_authuser is defined and nullmailer_authuser|length %}
+AuthUser={{ nullmailer_authuser }}
+{% endif %}
+
+{% if nullmailer_authpass is defined and nullmailer_authpass|length %}
+AuthPass={{ nullmailer_authpass }}
+{% endif %}
+

@@ -1,0 +1,7 @@
+---
+- name: Rebuild debian ssmtp database
+  command: dpkg-reconfigure ssmtp -f noninteractive -p critical
+
+- name: Rebuild debian msmtp database
+  command: dpkg-reconfigure msmtp -f noninteractive -p critical
+

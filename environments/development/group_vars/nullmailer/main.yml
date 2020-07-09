@@ -1,0 +1,32 @@
+---
+nullmailer: "{{ 
+  'msmtp' if ansible_facts.distribution == 'Debian' else
+  'ssmtp' if ansible_facts.distribution == 'Ubuntu'
+  }}"
+
+nullmailer_ssmtp_packages:
+  - ssmtp
+  - bsd-mailx
+
+nullmailer_msmtp_packages:
+  - msmtp
+  - msmtp-mta
+  - bsd-mailx
+
+remove_packages: 
+  - exim4
+  - exim4-daemon-light
+  - exim4-base
+  - exim4-config
+  - postfix
+
+nullmailer_mailname: '{{ ansible_facts.domain }}'
+nullmailer_fqdn: '{{ ansible_facts.fqdn }}'
+nullmailer_fromoverride: false
+nullmailer_from: 'root@{{ nullmailer_mailname }}'
+nullmailer_to: admin@gmail.com
+nullmailer_host: 'smtp.eu.mailgun.org'
+nullmailer_port: 587
+nullmailer_tls: false
+nullmailer_starttls: true
+

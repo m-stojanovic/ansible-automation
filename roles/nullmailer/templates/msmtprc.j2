@@ -1,0 +1,40 @@
+{{ ansible_managed | comment }}
+
+defaults
+
+{% if nullmailer_host is defined and nullmailer_host|length %}
+host {{ nullmailer_host }}
+{% endif %}
+
+{% if nullmailer_port is defined and nullmailer_port|int %}
+port {{ nullmailer_port }}
+{% endif %}
+
+{% if nullmailer_fqdn is defined and nullmailer_fqdn|length %}
+domain {{ nullmailer_fqdn }}
+{% endif %}
+
+{% if nullmailer_mailname is defined and nullmailer_mailname|length %}
+maildomain {{ nullmailer_mailname }}
+{% endif %}
+
+tls {{ 'on' if nullmailer_tls|bool or nullmailer_starttls|bool else 'off' }}
+tls_starttls {{ 'on' if nullmailer_starttls|bool else 'off' }}
+
+{% if nullmailer_fromoverride|bool %}
+auto_from on
+{% else %}
+auto_from off
+from {{ nullmailer_from }}
+{% endif %}
+
+aliases /etc/aliases
+
+account system
+{% if nullmailer_authuser is defined and nullmailer_authpass is defined %}
+auth on
+user {{ nullmailer_authuser }}
+password {{ nullmailer_authpass }}
+{% endif %}
+
+account default : system

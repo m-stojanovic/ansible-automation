@@ -1,0 +1,25 @@
+---
+- name: disable ssmtp debconf config overwrite
+  debconf:
+    name: ssmtp
+    question: ssmtp/overwriteconfig 
+    value: false
+    vtype: boolean
+  notify: 
+    - 'Rebuild debian ssmtp database'
+
+- name: install ssmtp
+  apt:
+    name: "{{ nullmailer_ssmtp_packages }}"
+    state: present
+    force_apt_get: true
+    autoclean: true
+    install_recommends: no
+
+- name: Configure SSMTP
+  template:
+    src: 'ssmtp.conf.j2'
+    dest: '/etc/ssmtp/ssmtp.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0640'

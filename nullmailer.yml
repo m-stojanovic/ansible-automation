@@ -1,0 +1,4 @@
+---
+- hosts: nullmailer
+  roles:
+    - roles/nullmailer
