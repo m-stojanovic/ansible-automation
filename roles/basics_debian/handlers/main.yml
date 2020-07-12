@@ -1,2 +1,4 @@
 ---
-# handlers file for basics
+- name: update nfs exports
+  command: exportfs -avr
+  listen: update nfs

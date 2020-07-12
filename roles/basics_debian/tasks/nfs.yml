@@ -1,0 +1,18 @@
+- name: install nfs
+  apt:
+    name: nfs-kernel-server
+    state: latest
+    force_apt_get: yes
+    install_recommends: no
+
+- name: start and enable nfs
+  service:
+    name: nfs-kernel-server
+    state: started
+    enabled: yes
+
+- name: configure exports
+  template:
+    src: 'exports.j2'
+    dest: /etc/exports
+  notify: update nfs

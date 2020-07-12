@@ -1,0 +1,14 @@
+- name: get file status
+  stat:
+    path: 'user-agreement.txt'
+  register: filestatus
+
+- name: debug info
+  debug:
+    var: filestatus
+
+- name: create users if file exists on remote host
+  user: 
+    name: "{{ item }}"
+  when: filestatus.stat.exists
+  loop: "{{ users }}"

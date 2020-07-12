@@ -5,4 +5,6 @@
 - import_tasks: remove-cloud-init.yml
 - import_tasks: hostname.yml
 - import_tasks: domainname.yml
+- import_tasks: nfs.yml
+- import_tasks: users.yml
 

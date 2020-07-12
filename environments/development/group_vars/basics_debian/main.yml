@@ -1,1 +1,9 @@
 domain_name: www.new.domain.name.com
+nfs_ip: "{{ hostvars['ansible-target-1']['ansible_default_ipv4']['address'] }}" # we are putting value in nfs_ip for each remote host,as we are using ansible magic variable 'hostvars' that let us use a host from our inventory file(ansible-target-1), and his default_ipv4 address['ansible_default_ipv4']['address'] == ansible_default_ipv4.address,nfs_ip is defined in template which we put on remote host as file /etc/hosts
+nfs_hostname: "{{ hostvars['ansible-target-1']['ansible_hostname'] }}"
+share_path: /mnt/nfsroot
+users: 
+  - frank
+  - josh
+  - joe
+  - sarah
