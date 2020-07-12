@@ -1,0 +1,18 @@
+- name: configure virtual host
+  template:
+    src: 'vhost.conf.j2'
+    dest: /etc/apache2/sites-enabled
+  notify:
+    - apache2service
+  tags:
+    - vhost
+
+- name: configure site auth
+  template:
+    src: 'htpasswd.j2'
+    dest: /etc/apache2/
+  notify:
+    - apache2service
+  tags:
+    - vhost
+

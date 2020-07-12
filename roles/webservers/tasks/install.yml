@@ -1,0 +1,10 @@
+- name: install apache2
+  apt:
+    name: apache2
+    state: latest
+    force_apt_get: yes
+    install_recommends: no
+  notify:
+    - apache2service
+  tags:
+    - base-install
