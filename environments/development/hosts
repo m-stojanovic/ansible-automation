@@ -14,3 +14,6 @@ ansible-target-1
 
 [nullmailer]
 ansible-target-1
+
+[docker]
+ansible-target-3 ansible_host=192.168.0.37 ansible_user=root ansible_ssh_pass="osboxesorg"
