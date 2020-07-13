@@ -1,16 +1,4 @@
-#- name: Remove Redis container
-#  docker_compose:
-#    name: "{{ deployment_environment }}-redis-server"
-#    force_kill: yes
-#    state: absent
-
-#- name: Remove RabbitMQ container
-#  docker_compose:
-#   name: "{{ deployment_environment }}-rabbit-server"
-#    force_kill: yes
-#    state: absent
-  
-- name: Remove Redis container
+- name: Remove active containers
   docker_compose:
     project_src: "{{ item }}"
     stopped: yes
