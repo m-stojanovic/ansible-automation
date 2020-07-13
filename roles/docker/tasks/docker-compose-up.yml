@@ -1,8 +1,3 @@
-#- name: Copy docker-compose.yml to remote host
-#  copy: 
-#    src: files/redis/docker-compose.yml
-#    dest: /tmp/
-
 - name: Create and start services
   docker_compose:
     project_src: "{{ item }}"
