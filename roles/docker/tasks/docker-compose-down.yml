@@ -1,4 +1,4 @@
-- name: Remove active containers
+- name: Stop active containers
   docker_compose:
     project_src: "{{ item }}"
     stopped: yes
