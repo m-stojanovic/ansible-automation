@@ -1,5 +1,4 @@
 ---
-# tasks file for roles/docker
 - import_tasks: install.yml
   tags: [install]
 
