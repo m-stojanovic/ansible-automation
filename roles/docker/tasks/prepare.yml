@@ -23,10 +23,10 @@
     state: started
     enabled: yes
 
-#- name: Disable THP in kernel 
+#- name: Disable THP in kernel v2 - not working because from some reason its not done as user root from remote host, even if specified
 #  command: "{{ item }}"
 #  with_items:
 #    - echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
 #    - echo "never" > /sys/kernel/mm/transparent_hugepage/defrag
 #  become: yes
-# become_user: root
+#  become_user: root
