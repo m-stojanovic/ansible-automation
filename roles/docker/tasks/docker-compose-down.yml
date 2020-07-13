@@ -1,0 +1,19 @@
+#- name: Remove Redis container
+#  docker_compose:
+#    name: "{{ deployment_environment }}-redis-server"
+#    force_kill: yes
+#    state: absent
+
+#- name: Remove RabbitMQ container
+#  docker_compose:
+#   name: "{{ deployment_environment }}-rabbit-server"
+#    force_kill: yes
+#    state: absent
+  
+- name: Remove Redis container
+  docker_compose:
+    project_src: "{{ item }}"
+    stopped: yes
+  with_items:
+    - ~/redis
+    - ~/rabbitmq

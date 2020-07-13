@@ -1,0 +1,25 @@
+---
+- name: create required directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - ~/redis
+    - ~/rabbitmq
+  
+- name: Copy redis docker-compose file
+  template:
+    src: docker-compose-redis.yml
+    dest: ~/redis/docker-compose.yml
+    owner: osboxes
+    group: osboxes
+
+- name: Copy rabbitmq docker-compose file
+  template:
+    src: docker-compose-rabbitmq.yml
+    dest: ~/rabbitmq/docker-compose.yml
+    owner: osboxes
+    group: osboxes
+
+

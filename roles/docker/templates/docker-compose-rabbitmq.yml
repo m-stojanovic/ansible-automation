@@ -1,0 +1,15 @@
+version: "3"
+services:
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: rabbit-mq-dev
+    hostname: rabbit-mq-dev
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_ERLANG_COOKIE: secret_cookie
+    volumes:
+      - /root/rabbitmq/data-rabbitmq:/var/lib/rabbitmq

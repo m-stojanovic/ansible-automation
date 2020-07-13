@@ -17,7 +17,7 @@
   command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
   when: docker_check.stderr.find('service could not be found') != -1
 
-#- name: Add docker repository
+#- name: Add docker repository v2
 #  get_url:
 #    url: https://download.docker.com/linux/centos/docker-ce.repo
 #    dest: /etc/yum.repos.d/docker-ce.repo
@@ -50,12 +50,23 @@
   register: docker_compose_check
   ignore_errors: yes
 
+#- name: Install pip
+#  yum:
+#    name: python3-pip
+#    state: latest
+
+#- name: Install docker-compose
+#  command: pip3 install docker-compose
+#  become: yes
+
 - name: Install docker-compose
   get_url:
     url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
-    dest: /usr/bin/docker-compose
+    dest: /usr/local/bin/docker-compose
     mode: 0755
   when:
     - docker_compose_check.msg is defined
     - docker_compose_check.msg.find('No such file or directory') != -1
 
+#- name: Symlink /usr/local/bin/ to /usr/bin 
+#  command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
