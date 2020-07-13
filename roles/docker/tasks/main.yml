@@ -8,8 +8,10 @@
 - import_tasks: docker-compose-up.yml
   tags: [compose-up]
 
+- import_tasks: docker-compose-down.yml
+  tags: [compose-down]
+
 - import_tasks: copy.yml
   tags: [copy]
  
-- import_tasks: docker-compose-down.yml
-  tags: [compose-down]
+
