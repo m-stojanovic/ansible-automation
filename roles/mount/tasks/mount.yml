@@ -1,0 +1,11 @@
+- name: Format the disk
+  filesystem:
+    dev: /dev/RHCE/AppDB2
+    fstype: xfs
+
+- name: Mount the disk
+  mount:
+    fstype: xfs
+    src: /dev/RHCE/AppDB2
+    state: mounted
+    path: /mnt/appdb2
