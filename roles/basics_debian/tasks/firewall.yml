@@ -1,0 +1,13 @@
+- name: ssh firewall rules
+  firewalld:
+    permanent: yes
+    state: enabled
+    immediate: yes
+    service: ssh
+
+- name: postgresql firewall rules 
+ firewalld:
+    permanent: yes
+    state: enabled
+    immediate: yes
+    service: postgresql
