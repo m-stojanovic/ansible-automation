@@ -1,7 +1,14 @@
+# This method  is not working on Amazon Centos Nodes as docker_compose cant recognize installed docker-compose because of some missing dependencies that cant be additionally installed 
+#- name: Stop active containers
+#  docker_compose:
+#    project_src: "{{ item }}"
+#    stopped: yes
+#  with_items:
+#    - /carnegie/docker-compose/redis
+#    - /carnegie/docker-compose/rabbitmq
+
 - name: Stop active containers
-  docker_compose:
-    project_src: "{{ item }}"
-    stopped: yes
+  shell: /usr/local/bin/docker-compose -f "{{ item }}/docker-compose.yml" down
   with_items:
-    - ~/redis
-    - ~/rabbitmq
+    - /carnegie/docker-compose/redis
+    - /carnegie/docker-compose/rabbitmq
