@@ -6,7 +6,7 @@
     service: ssh
 
 - name: postgresql firewall rules 
- firewalld:
+  firewalld:
     permanent: yes
     state: enabled
     immediate: yes
