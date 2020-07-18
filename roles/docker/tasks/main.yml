@@ -2,6 +2,9 @@
 - import_tasks: install.yml
   tags: [install]
 
+- import_tasks: uninstall.yml
+  tags: [uninstall]
+
 - import_tasks: prepare.yml
   tags: [prepare]
 
@@ -13,5 +16,3 @@
 
 - import_tasks: copy.yml
   tags: [copy]
- 
-
