@@ -1,9 +1,15 @@
-- name: Create and start services
-  docker_compose:
-    project_src: "{{ item }}"
-    state: present
-  register: output
-  become: yes 
+# This method  is not working on Amazon Centos Nodes as docker_compose cant recognize installed docker-compose because of some missing dependencies that cant be additionally installed 
+#- name: Create and start services
+#  docker_compose:
+#    project_src: "{{ item }}"
+#    state: present
+#  become: yes 
+#  with_items:
+#    - /carnegie/docker-compose/redis
+#    - /carnegie/docker-compose/rabbitmq
+
+- name: Start the containers
+  shell: /usr/local/bin/docker-compose -f "{{ item }}/docker-compose.yml" up -d
   with_items:
-    - ~/redis
-    - ~/rabbitmq
+    - /carnegie/docker-compose/redis
+    - /carnegie/docker-compose/rabbitmq
