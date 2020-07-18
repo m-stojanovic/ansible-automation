@@ -1,0 +1,19 @@
+- name: Check is docker installed
+  command: systemctl status docker
+  register: docker_check
+  ignore_errors: yes
+
+- name: Uninstall docker
+  yum:
+    name: docker
+    state: absent
+  when: docker_check.stdout.find('running') != 1
+
+- name: Check is docker-compose installed
+  command: docker-compose --version
+  register: docker_compose_check
+  ignore_errors: yes
+
+- name: Uninstall docker-compose
+  command: rm $(which docker-compose)
+  when: docker_compose_check.stdout.find('version') != 1
