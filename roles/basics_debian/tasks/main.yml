@@ -7,4 +7,6 @@
 - import_tasks: domainname.yml
 - import_tasks: nfs.yml
 - import_tasks: users.yml
+- import_tasks: firewall.yml
+  tags: [firewall]
 
