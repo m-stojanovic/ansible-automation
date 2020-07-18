@@ -1,2 +1,2 @@
-- import_tasks: create
-- import_tasks: mount_disk
+- import_tasks: create.yml
+- import_tasks: mount.yml
