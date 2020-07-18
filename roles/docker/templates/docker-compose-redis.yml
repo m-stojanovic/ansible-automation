@@ -13,6 +13,7 @@ services:
       - /root/redis/data-redis:/var/lib/redis
     networks:
       - redis-net-dev
+    restart: unless-stopped
 
 networks:
   redis-net-dev:
