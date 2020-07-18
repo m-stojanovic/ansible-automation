@@ -3,19 +3,46 @@
   register: docker_check
   ignore_errors: yes
 
-- name: Download dependencies required for installing docker
+- name: Update all packages
+  yum:
+    name: '*'
+    state: latest
+    update_only: yes
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name: Install pip3
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python36u
+    - python36u-libs
+    - python36u-devel
+    - python36u-pip
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name: Activate pip3  
+  command: python3.6 -m ensurepip
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name: Ensure a list of yum packages are installed
   yum:
     name: "{{ item }}"
     state: latest
     update_cache: yes
   with_items:
+    - python-pip
     - yum-utils
     - device-mapper-persistent-data
     - lvm2
-
-- name: Add docker repository
-  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    - amazon-linux-extras
   when: docker_check.stderr.find('service could not be found') != -1
+
+#- name: Install docker (normal method)
+#  package:
+#    name: docker-ce
+#    state: latest
+#  when: docker_check.stderr.find('service could not be found') != -1
 
 #- name: Add docker repository v2
 #  get_url:
@@ -23,50 +50,52 @@
 #    dest: /etc/yum.repos.d/docker-ce.repo
 #  when: docker_check.stderr.find('service could not be found') != -1
 
-- name: Install docker
-  package:
-    name: docker-ce
-    state: latest
+- name: Add extras repository
+  shell: yum-config-manager --enable extras
+  when: docker_check.stderr.find('service could not be found') != -1
+  
+# Install docker on Amazon Linux Instances
+- name: Install docker-ce (centos) via amazon-linux-extras packages
+  shell: "amazon-linux-extras install docker=18.06.1 -y"
   when: docker_check.stderr.find('service could not be found') != -1
 
-- name: Enabled docker daemon
-  systemd: 
-    name: docker
-    enabled: yes
-
-- name: Start docker service
+- name: Enable Docker CE service at startup
   service:
     name: docker
     state: started
+    enabled: yes
+  when: docker_check.stderr.find('service could not be found') != -1
 
-- name: Add ec2-user to docker group
+- name: Add user to docker group
   user:
-    name: osboxes
+    name: "{{ user }}"
     groups: docker
     append: yes
+  when: docker_check.stderr.find('service could not be found') != -1
 
 - name: Check is docker-compose installed
   command: docker-compose --version
   register: docker_compose_check
   ignore_errors: yes
 
-#- name: Install pip
-#  yum:
-#    name: python3-pip
-#    state: latest
-
-#- name: Install docker-compose
-#  command: pip3 install docker-compose
-#  become: yes
-
 - name: Install docker-compose
-  get_url:
-    url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
-    dest: /usr/local/bin/docker-compose
-    mode: 0755
-  when:
-    - docker_compose_check.msg is defined
-    - docker_compose_check.msg.find('No such file or directory') != -1
+  command: pip3 install docker-compose
+  when: docker_compose_check.msg.find('No such file or directory') != -1
 
-#- name: Symlink /usr/local/bin/ to /usr/bin 
-#  command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+- name: Symlink /usr/local/bin/ to /usr/bin
+  command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  when: docker_compose_check.msg.find('No such file or directory') != -1
+
+# This methdo not working due to Amazon Centos Nodes missing dependencies
+#- name: Check is docker-compose installed
+#    command: docker-compose --version
+#    register: docker_compose_check
+#    ignore_errors: yes
+#- name: Install docker-compose
+#    get_url:
+#      url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
+#      dest: /usr/local/bin/docker-compose
+#      mode: 0755
+#    when:
+#      - docker_compose_check.msg is defined
+#      - docker_compose_check.msg.find('Command not found') != -1
