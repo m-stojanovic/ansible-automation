@@ -1,0 +1,12 @@
+- name: Create the Volume Group
+  lvg:
+    vg: RHCE
+    pvs: /dev/xvdg
+
+- name: Create Logical Volume
+  lvol:
+    lv: AppDB2
+    vg: RHCE
+    size: 10G
+    pvs: /dev/xvdg
+    state: present
