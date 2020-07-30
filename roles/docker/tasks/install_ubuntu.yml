@@ -30,11 +30,7 @@
     repo: deb https://download.docker.com/linux/ubuntu focal stable
     state: present
   when: docker_check.stderr.find('service could not be found') != -1
-#- name: Install docker (normal method)
-#  package:
-#    name: docker-ce
-#    state: latest
-#  when: docker_check.stderr.find('service could not be found') != -1
+
 - name: Install Docker
   apt:
     name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
