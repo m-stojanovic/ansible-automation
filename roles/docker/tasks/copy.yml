@@ -1,25 +1,33 @@
 ---
-- name: create required directory
+- name: Create required directory
   file:
     path: "{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    recurse: yes
     state: directory
-    mode: 0755
-  with_items:
-    - ~/redis
-    - ~/rabbitmq
+  loop:
+    - /home/{{ user }}/docker-compose/{{ service }}
   
-- name: Copy redis docker-compose file
+- name: Copy docker-compose file
   template:
-    src: docker-compose-redis.yml
-    dest: ~/redis/docker-compose.yml
-    owner: osboxes
-    group: osboxes
+    src: "{{ service }}/docker-compose.yml"
+    dest: ~/home/{{ user }}/docker-compose/{{ service }}
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
-- name: Copy rabbitmq docker-compose file
+- name: Copy Dockerfile file
   template:
-    src: docker-compose-rabbitmq.yml
-    dest: ~/rabbitmq/docker-compose.yml
-    owner: osboxes
-    group: osboxes
+    src: "{{ service }}/Dockerfile"
+    dest: /home/{{ user }}/docker-compose/{{ service }}
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  ignore_errors: yes
 
-
+- name: Copy bootstrap.sh script
+  template:
+    src: "{{ service }}/bootstrap.sh"
+    dest: /home/{{ user }}/docker-compose/{{ service }}
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  ignore_errors: yes
