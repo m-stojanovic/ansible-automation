@@ -7,10 +7,9 @@
     reload: yes
 
 # Transparent Huge Pages (causes latency and mem usage issues with redis) - need to disable
-
 - name: Disable THP in kernel
   template: 
-    src: 'disable-transparent-huge-pages.service'
+    src: 'redis/disable-transparent-huge-pages.service'
     dest: /etc/systemd/system/disable-transparent-huge-pages.service
     owner: root
     group: root
