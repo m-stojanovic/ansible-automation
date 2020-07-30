@@ -71,5 +71,7 @@
   when: docker_compose_check.msg.find('No such file or directory') != -1
 
 - name: Symlink /usr/local/bin/ to /usr/bin
-  command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  when: docker_compose_check.msg.find('No such file or directory') != -1
+  file:
+    src: /usr/local/bin/docker-compose
+    dest: /usr/bin/docker-compose
+    state: link
