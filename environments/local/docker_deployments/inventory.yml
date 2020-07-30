@@ -1,0 +1,12 @@
+all:
+  children:
+    local:
+      children:
+        docker_deployments:
+          children:
+            grafana:
+              hosts: 
+                grafana-server:
+                  ansible_ssh_host:
+                  ansible_user:
+                  ansible_ssh_pass: 
