@@ -38,18 +38,6 @@
     - amazon-linux-extras
   when: docker_check.stderr.find('service could not be found') != -1
 
-#- name: Install docker (normal method)
-#  package:
-#    name: docker-ce
-#    state: latest
-#  when: docker_check.stderr.find('service could not be found') != -1
-
-#- name: Add docker repository v2
-#  get_url:
-#    url: https://download.docker.com/linux/centos/docker-ce.repo
-#    dest: /etc/yum.repos.d/docker-ce.repo
-#  when: docker_check.stderr.find('service could not be found') != -1
-
 - name: Add extras repository
   shell: yum-config-manager --enable extras
   when: docker_check.stderr.find('service could not be found') != -1
@@ -85,17 +73,3 @@
 - name: Symlink /usr/local/bin/ to /usr/bin
   command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   when: docker_compose_check.msg.find('No such file or directory') != -1
-
-# This methdo not working due to Amazon Centos Nodes missing dependencies
-#- name: Check is docker-compose installed
-#    command: docker-compose --version
-#    register: docker_compose_check
-#    ignore_errors: yes
-#- name: Install docker-compose
-#    get_url:
-#      url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
-#      dest: /usr/local/bin/docker-compose
-#      mode: 0755
-#    when:
-#      - docker_compose_check.msg is defined
-#      - docker_compose_check.msg.find('Command not found') != -1
