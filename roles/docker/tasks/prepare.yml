@@ -14,6 +14,7 @@
     owner: root
     group: root
     mode: 0755
+  register: stat_thp
 
 - name: Start, Enable service disable-transparent-huge-pages.service
   systemd:
@@ -21,6 +22,8 @@
     name: disable-transparent-huge-pages.service
     state: started
     enabled: yes
+  when: stat_thp.stat.isfile is defined and stat_thp.stat.isfile
+  ignore_errors: yes
 
 - name: Prepare repository to download required packages
   yum:
