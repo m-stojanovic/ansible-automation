@@ -19,3 +19,6 @@
 
 - import_tasks: copy.yml
   tags: [copy]
+ 
+- import_tasks: copy_grafana.yml
+  tags: [copy-grafana]
