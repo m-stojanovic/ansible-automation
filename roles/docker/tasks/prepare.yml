@@ -6,6 +6,12 @@
     state: present
     reload: yes
 
+# Condition for THP Pages - Redis
+- name: Check does redis directory exists
+  stat:
+    path: /home/carnegie/docker-compose/redis
+  register: dir_status
+
 # Transparent Huge Pages (causes latency and mem usage issues with redis) - need to disable
 - name: Disable THP in kernel
   template: 
@@ -14,7 +20,7 @@
     owner: root
     group: root
     mode: 0755
-  register: stat_thp
+  when: dir_status.stat.isdir and is defined dir.status.stat.isdir
 
 - name: Start, Enable service disable-transparent-huge-pages.service
   systemd:
@@ -22,14 +28,14 @@
     name: disable-transparent-huge-pages.service
     state: started
     enabled: yes
-  when: stat_thp.stat.isfile is defined and stat_thp.stat.isfile
-  ignore_errors: yes
+  when: dir_status.stat.isdir and is defined dir.status.stat.isdir
 
 - name: Prepare repository to download required packages
   yum:
     name: epel-release
     state: present
   when: ansible_facts['distribution'] == 'Amazon'
+  
 #- name: Prepare repository to download required packages
 #  yum_repository:
 #    name: ius-release
