@@ -20,7 +20,7 @@
     owner: root
     group: root
     mode: 0755
-  when: dir_status.stat.isdir and is defined dir.status.stat.isdir
+  when: dir_status.stat.exists
 
 - name: Start, Enable service disable-transparent-huge-pages.service
   systemd:
@@ -28,7 +28,7 @@
     name: disable-transparent-huge-pages.service
     state: started
     enabled: yes
-  when: dir_status.stat.isdir and is defined dir.status.stat.isdir
+  when: dir_status.stat.exists
 
 - name: Prepare repository to download required packages
   yum:
