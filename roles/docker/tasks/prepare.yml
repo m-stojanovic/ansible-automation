@@ -28,11 +28,11 @@
     name: epel-release
     state: present
 
-- name: Prepare repository to download required packages
-  yum_repository:
-    name: ius-release
-    description: ius repo
-    baseurl: https://repo.ius.io/ius-release-el7.rpm
+#- name: Prepare repository to download required packages
+#  yum_repository:
+#    name: ius-release
+#    description: ius repo
+#    baseurl: https://repo.ius.io/ius-release-el7.rpm
 
 #- name: Disable THP in kernel second method- not working because from some reason its not done as user root from remote host, even if specified
 #  command: "{{ item }}"
