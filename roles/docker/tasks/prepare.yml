@@ -26,7 +26,7 @@
   yum:
     name: epel-release
     state: present
-
+  when: ansible_facts['distribution'] == 'Amazon'
 #- name: Prepare repository to download required packages
 #  yum_repository:
 #    name: ius-release

@@ -1,16 +1,17 @@
 # This method  is not working on Amazon Centos Nodes as docker_compose cant recognize installed docker-compose because of some missing dependencies that cant be additionally installed 
-- name: Create and start services
-  docker_compose:
-    project_src: "{{ item }}"
-    state: present
-  become: yes 
-  loop:
-    - /home/{{ user }}/docker-compose/{{ service }}
-  when: ansible_facts['distribution'] == 'Ubuntu'
+#- name: Create and start services
+#  docker_compose:
+#    project_src: "{{ item }}"
+#    state: present
+#  become: yes 
+#  with_items:
+#    - /home/{{ user }}/docker-compose/{{ service }}
+#  when: ansible_facts['distribution'] == 'Ubuntu'
 
 # This method is used for Amazon instances
 - name: Start the containers
   shell: /usr/local/bin/docker-compose -f "{{ item }}/docker-compose.yml" up -d
   with_items:
     - /carnegie/docker-compose/{{ service }}
-  when: ansible_facts['distribution'] == 'Amazon'
+    - /home/{{ user }}/docker-compose/{{ service }}
+  ignore_errors: yes

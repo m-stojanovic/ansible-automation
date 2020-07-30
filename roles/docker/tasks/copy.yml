@@ -12,7 +12,7 @@
 - name: Copy docker-compose file
   template:
     src: "{{ service }}/docker-compose.yml"
-    dest: ~/home/{{ user }}/docker-compose/{{ service }}
+    dest: /home/{{ user }}/docker-compose/{{ service }}
     owner: "{{ user }}"
     group: "{{ user }}"
 
