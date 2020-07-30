@@ -1,8 +1,11 @@
 [development:children]
 sshkeys
+webservers
+basics_debian
+nullmailer
 
 [sshkeys]
-ansible-target-1 ansible_host=192.168.0.34 ansible_user=root ansible_ssh_pass="osboxesorg"
+ansible-target-1 ansible_host=192.168.0.27 ansible_user=root ansible_ssh_pass="osboxesorg"
 #ansible-target-2 ansible_host=192.168.0.35 ansible_user=root ansible_ssh_pass="osboxesorg"
 
 [webservers]
@@ -10,10 +13,10 @@ ansible-target-1
 
 [basics_debian]
 ansible-target-1
-#ansible-target-2
 
 [nullmailer]
 ansible-target-1
 
 [docker]
-ansible-target-3 ansible_host=192.168.0.37 ansible_user=root ansible_ssh_pass="osboxesorg"
+#ansible-target-3 ansible_host=192.168.0.37 ansible_user=root ansible_ssh_pass="osboxesorg"
+ansible-target-1 ansible_host=192.168.0.29 ansible_user=root ansible_ssh_pass="osboxesorg"
