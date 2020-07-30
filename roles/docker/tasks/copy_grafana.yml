@@ -1,0 +1,31 @@
+---
+- name: create required directory
+  file:
+    path: "{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    recurse: yes
+    state: directory
+  with_items:
+    - ~/docker-compose/grafana
+  
+- name: Copy grafana docker-compose file
+  template:
+    src: grafana/docker-compose.yml
+    dest: ~/docker-compose/grafana
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+- name: Copy grafana Dockerfile file
+  template:
+    src: grafana/Dockerfile
+    dest: ~/docker-compose/grafana
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+- name: Copy grafana bootstrap.sh script
+  template:
+    src: grafana/bootstrap.sh
+    dest: ~/docker-compose/grafana
+    owner: "{{ user }}"
+    group: "{{ user }}"
