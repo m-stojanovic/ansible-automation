@@ -1,0 +1,75 @@
+---
+- name: Check is docker installed
+  command: systemctl status docker
+  register: docker_check
+  ignore_errors: yes
+
+- name: Update all packages
+  apt:
+    name: '*'
+    state: latest
+    update_cache: yes
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name: Install required packages
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg-agent', 'software-properties-common']
+    state: latest
+
+- name: Add Docker official GPG key
+  apt_key:
+    url:  https://download.docker.com/linux/ubuntu/gpg 
+    state: present
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name:
+  command: apt-key fingerprint 0EBFCD88
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+  when: docker_check.stderr.find('service could not be found') != -1
+#- name: Install docker (normal method)
+#  package:
+#    name: docker-ce
+#    state: latest
+#  when: docker_check.stderr.find('service could not be found') != -1
+- name: Install Docker
+  apt:
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+    state: latest
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name: Enable Docker CE service at startup
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name: Add user to docker group
+  user:
+    name: ubuntu
+    groups: docker
+    append: yes
+  when: docker_check.stderr.find('service could not be found') != -1
+
+- name: Check is docker-compose installed
+  command: docker-compose --version
+  register: docker_compose_check
+  ignore_errors: yes
+
+- name: Install docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+  when:
+      - docker_compose_check.msg is defined
+      - docker_compose_check.msg.find('No such file or directory') != -1
+
+- name: Symlink /usr/local/bin/ to /usr/bin
+  file:
+    src: /usr/local/bin/docker-compose
+    dest: /usr/bin/docker-compose
