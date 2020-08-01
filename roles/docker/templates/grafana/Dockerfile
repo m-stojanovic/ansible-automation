@@ -14,8 +14,8 @@ RUN \
   cat /etc/sysctl.d/20-ipv6-disable.conf; \
   sysctl -p;
   
-# Add Dockerfile inside the /root directory of the container
-ADD Dockerfile /root/Dockerfile
+# Copy Dockerfile inside the /root directory of the container
+COPY Dockerfile /root/Dockerfile
 
 # Disable Debian default frontend debconf warnings
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
@@ -58,8 +58,8 @@ RUN chown root:root /etc/bootstrap.sh && chmod 700 /etc/bootstrap.sh
 # Cleanup
 RUN apt-get clean all && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#CMD ["/etc/bootstrap.sh", "-d"]
+CMD ["/etc/bootstrap.sh", "-d"]
 
 EXPOSE 3000
 
-ENTRYPOINT ["/usr/sbin/grafana-server", "-config", "/etc/grafana/grafana.ini"]
+#ENTRYPOINT ["/usr/sbin/grafana-server", "-config", "/etc/grafana/grafana.ini"]
