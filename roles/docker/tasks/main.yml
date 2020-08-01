@@ -17,5 +17,8 @@
 - import_tasks: docker-compose-down.yml
   tags: [compose-down]
 
+- import_tasks: docker-compose-restart.yml
+  tags: [compose-restart]
+  
 - import_tasks: copy.yml
   tags: [copy]
