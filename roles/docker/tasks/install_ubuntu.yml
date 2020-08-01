@@ -22,7 +22,7 @@
     state: present
   when: docker_check.stderr.find('service could not be found') != -1
 
-- name:
+- name: Adding fingerprint to key
   command: apt-key fingerprint 0EBFCD88
 
 - name: Add Docker Repository
