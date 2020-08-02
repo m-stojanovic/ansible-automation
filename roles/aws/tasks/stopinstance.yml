@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  vars_files:
+    - keys.yml
+  tasks:
+    - name: Stop running instance
+      ec2:
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        state: stopped
+        instance_tags:
+          name: target-1
+# Method 2
+    - name: Stop running instance
+      local_action: ec2
+      args:
+        state: stopped
+        instance_tags:
+          Name: target-1
