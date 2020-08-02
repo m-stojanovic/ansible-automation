@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  vars_files:
+    - keys.yml
+  tasks:
+    - name: Create an instance
+      ec2:
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        instance_type: t2.micro
+        keypair: ansible-target
+        image: ami-0ac80df6eff0e70b5 # Ubunut 18.04
+        assign_public_ip: yes
+        vpc_subnet_id: subnet-09c67e5df8e2597ba
+        #group: demoSG
+        wait: true
+        exact_count: 1
+        count_tag:
+          Name: target-3
+        instance_tags:
+          Name: target-3
+      register: ec2
+    - debug: 
+        var: ec2
+
+    - name: add host to inventory
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: production
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+        ansible_ssh_private_key_file: /home/cloud_user/.ssh/ansible-target.pem
+      loop: "{{ ec2.instances }}"
+
+- hosts: localhost
+  gather_facts: no
+  remote_user: ubuntu
+  tasks: 
+    - name: wait for SSH
+      wait_for_connection:
+        delay: 5
+        timeout: 90
+
+    - name: check host status
+      ping:
