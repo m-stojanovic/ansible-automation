@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  vars_files:
+    - keys.yml
+  tasks:
+    - name: craete a new ec2 keypair
+      ec2_key:
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        name: aws_keypair
+      register: keypair
+
+    - name: write new keypair to file locally
+      lineinfile:
+        create: yes
+        path: /home/cloud_user/.ssh/aws_keypair.pem
+        line: "{{ keypair['key']['private_key'] }}"
+        mode: 0600
