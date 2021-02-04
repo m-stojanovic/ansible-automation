@@ -1,0 +1,31 @@
+---
+- hosts: [server-1]
+  vars:
+    milos_ssh_key: "ssh-rsa SOMEKEY"
+  tasks:
+    - name: Check is ssh installed
+      service:
+        name: sshd
+        state: started
+        enabled: yes
+
+    - name: Check does file authorized_keys exists
+      stat:
+        path: ~/.ssh/authorized_keys
+      register: file_status
+
+    - debug:
+        msg: "File already exists!"
+      when: file_status.stat.exists
+
+    - name: Create authorized_keys if it not exists
+      file:
+        path: ~/.ssh/authorized_keys
+        state: touch
+        mode: 0600
+      when: file_status.stat.exists == false
+
+    - name: Copy public SSH keys to authorized_keys
+      lineinfile:
+        path: /home/ec2-user/.ssh/authorized_keys
+        line: "{{ milos_ssh_key }}"
