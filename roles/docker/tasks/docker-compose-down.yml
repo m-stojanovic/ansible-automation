@@ -11,6 +11,6 @@
 - name: Stop active containers
   shell: /usr/local/bin/docker-compose -f "{{ item }}/docker-compose.yml" down
   with_items:
-    - /carnegie/docker-compose/{{ service }}
+    - /devops/docker-compose/{{ service }}
     - /home/{{ user }}/docker-compose/{{ service }}
   ignore_errors: yes

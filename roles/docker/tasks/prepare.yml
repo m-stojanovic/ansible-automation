@@ -9,7 +9,7 @@
 # Condition for THP Pages - Redis
 - name: Check does redis directory exists
   stat:
-    path: /home/carnegie/docker-compose/redis
+    path: /home/devops/docker-compose/redis
   register: dir_status
 
 # Transparent Huge Pages (causes latency and mem usage issues with redis) - need to disable
